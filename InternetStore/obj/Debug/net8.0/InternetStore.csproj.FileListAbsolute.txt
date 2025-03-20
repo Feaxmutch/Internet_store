@@ -1,0 +1,14 @@
+F:\данил\Projects\visual_studio_projects\IJ_projects\File\InternetStore\InternetStore\bin\Debug\net8.0\InternetStore.exe
+F:\данил\Projects\visual_studio_projects\IJ_projects\File\InternetStore\InternetStore\bin\Debug\net8.0\InternetStore.deps.json
+F:\данил\Projects\visual_studio_projects\IJ_projects\File\InternetStore\InternetStore\bin\Debug\net8.0\InternetStore.runtimeconfig.json
+F:\данил\Projects\visual_studio_projects\IJ_projects\File\InternetStore\InternetStore\bin\Debug\net8.0\InternetStore.dll
+F:\данил\Projects\visual_studio_projects\IJ_projects\File\InternetStore\InternetStore\bin\Debug\net8.0\InternetStore.pdb
+F:\данил\Projects\visual_studio_projects\IJ_projects\File\InternetStore\InternetStore\obj\Debug\net8.0\InternetStore.GeneratedMSBuildEditorConfig.editorconfig
+F:\данил\Projects\visual_studio_projects\IJ_projects\File\InternetStore\InternetStore\obj\Debug\net8.0\InternetStore.AssemblyInfoInputs.cache
+F:\данил\Projects\visual_studio_projects\IJ_projects\File\InternetStore\InternetStore\obj\Debug\net8.0\InternetStore.AssemblyInfo.cs
+F:\данил\Projects\visual_studio_projects\IJ_projects\File\InternetStore\InternetStore\obj\Debug\net8.0\InternetStore.csproj.CoreCompileInputs.cache
+F:\данил\Projects\visual_studio_projects\IJ_projects\File\InternetStore\InternetStore\obj\Debug\net8.0\InternetStore.dll
+F:\данил\Projects\visual_studio_projects\IJ_projects\File\InternetStore\InternetStore\obj\Debug\net8.0\refint\InternetStore.dll
+F:\данил\Projects\visual_studio_projects\IJ_projects\File\InternetStore\InternetStore\obj\Debug\net8.0\InternetStore.pdb
+F:\данил\Projects\visual_studio_projects\IJ_projects\File\InternetStore\InternetStore\obj\Debug\net8.0\InternetStore.genruntimeconfig.cache
+F:\данил\Projects\visual_studio_projects\IJ_projects\File\InternetStore\InternetStore\obj\Debug\net8.0\ref\InternetStore.dll
