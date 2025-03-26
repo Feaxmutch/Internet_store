@@ -22,7 +22,7 @@
 
             cart.Inventory.ShowGoods();
 
-            Console.WriteLine(shop.MakeOrder(cart).PayLink);
+            Console.WriteLine(cart.Order().PayLink);
 
             cart.Add(iPhone12, 9);
         }
@@ -44,43 +44,7 @@
 
         public Cart Cart()
         {
-            return new Cart(this);
-        }
-
-        public Order MakeOrder(Cart cart)
-        {
-            List<Good> goodsInCart = cart.GiveAllGoods();
-            List<Good> goodsForOrder = new();
-            Random random = new();
-            string payLink = random.Next(int.MaxValue).ToString();
-            bool isSucces = true;
-
-            foreach (var good in goodsInCart)
-            {
-                if (_warehouse.TryDeliveOut(good.Name, out Good returnedGood))
-                {
-                    goodsForOrder.Add(returnedGood);
-                }
-                else
-                {
-                    isSucces = false;
-                }
-            }
-
-            if (isSucces)
-            {
-                return new Order(goodsForOrder, payLink);
-            }
-            else
-            {
-                foreach (var good in goodsForOrder)
-                {
-                    _warehouse.Delive(good);
-                }
-
-                Console.WriteLine("Не получилось создать заказ. На складе не хватает товара.");
-                return null;
-            }
+            return new Cart(_warehouse);
         }
     }
 
@@ -96,13 +60,13 @@
 
     class Cart
     {
-        private readonly Shop _shop;
         private readonly Inventory _inventory;
+        private readonly IDeliveOutOnly _warehouse;
 
-        public Cart(Shop shop)
+        public Cart(IDeliveOutOnly warehouse)
         {
-            _shop = shop;
             _inventory = new();
+            _warehouse = warehouse;
         }
 
         public IReadOnlyInventory Inventory => _inventory;
@@ -110,25 +74,38 @@
         public void Add(Good good, int count)
         {
             ArgumentOutOfRangeException.ThrowIfNegativeOrZero(count);
-            _shop.IsHaveGood(good.Name, out int havedCount);
+            _warehouse.Inventory.IsHaveGood(good.Name, out int havedCount);
             _inventory.IsHaveGood(good.Name, out int countInOrder);
 
-            if (havedCount >= count + countInOrder)
+            if (havedCount < count + countInOrder)
             {
-                for (int i = 0; i < count; i++)
-                {
-                    _inventory.TakeGood(good);
-                }
+                throw new ArgumentOutOfRangeException("Не возможно добавить весь товар в корзину. На складе не хватает товара.");
             }
-            else
+
+            for (int i = 0; i < count; i++)
             {
-                Console.WriteLine("Не получилось добавить товар в корзину. На складе не хватает товара.");
+                _inventory.TakeGood(good);
             }
         }
 
         public List<Good> GiveAllGoods()
         {
             return _inventory.GiveAllGoods();
+        }
+
+        public Order Order()
+        {
+            List<Good> goodsInCart = GiveAllGoods();
+            List<Good> goodsForOrder = new();
+            Random random = new();
+            string payLink = random.Next(int.MaxValue).ToString();
+
+            foreach (var good in goodsInCart)
+            {
+                goodsForOrder.Add(_warehouse.DeliveOut(good.Name));
+            }
+
+            return new Order(goodsForOrder, payLink);
         }
     }
 
@@ -161,7 +138,7 @@
         }
     }
 
-    class Warehouse
+    class Warehouse : IDeliveOutOnly
     {
         private readonly Inventory _inventory;
 
@@ -187,9 +164,9 @@
             _inventory.TakeGood(good);
         }
 
-        public bool TryDeliveOut(string goodName, out Good good)
+        public Good DeliveOut(string goodName)
         {
-            return _inventory.TryGiveGood(goodName, out good);
+            return _inventory.GiveGood(goodName);
         }
     }
 
@@ -292,9 +269,9 @@
             return goods;
         }
 
-        public bool TryGiveGood(string goodName, out Good returnedGood)
+        public Good GiveGood(string goodName)
         {
-            returnedGood = null;
+            Good returnedGood = null;
 
             if (TryGetSlot(goodName, out Slot returnedSlot))
             {
@@ -304,7 +281,12 @@
                 }
             }
 
-            return returnedGood == null == false;
+            if (returnedGood == null)
+            {
+                throw new ArgumentException();
+            }
+
+            return returnedGood;
         }
 
         private bool TryGetSlot(string GoodName, out Slot returnedSlot)
@@ -331,5 +313,12 @@
         void ShowGoods();
 
         bool IsHaveGood(string goodName, out int count);
+    }
+
+    interface IDeliveOutOnly
+    {
+        public IReadOnlyInventory Inventory { get; }
+
+        Good DeliveOut(string goodName);
     }
 }
